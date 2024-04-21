@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/utils/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import LoginForm from "./LoginForm";
+import PortalButton from "../portal/PortalButton";
 
 export default function UserProfile() {
   // Track the supabase User object
@@ -68,6 +69,7 @@ export default function UserProfile() {
       <h2>User Data</h2>
       {user ? (
         <>
+          {/* Email, Supabase User ID and Logout Buttons */}
           <p>
             Signed in with email: <strong>{user.email}</strong>
           </p>
@@ -82,7 +84,7 @@ export default function UserProfile() {
               Logout
             </button>
           </div>
-
+          {/* Stripe data, available once user subscribes to a plan */}
           <h2>Stripe Customer Data</h2>
           {stripeCustomer ? (
             <>
@@ -92,6 +94,7 @@ export default function UserProfile() {
                   <code>{JSON.stringify(stripeCustomer, null, 2)}</code>
                 </pre>
               </div>
+              <PortalButton />
             </>
           ) : (
             <div>

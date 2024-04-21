@@ -40,9 +40,26 @@ export async function POST(request: NextRequest) {
       // When a customer cancels their subscription, their plan remains active until the
       // end of their billing cycle, and this webhook event is received
       if (event.type === "customer.subscription.updated") {
+        const subscription: Stripe.Subscription = event.data.object;
+        console.log(subscription);
+        // Update the plan_expires field in the stripe_customers table
+        const { error } = await supabaseAdmin
+          .from("stripe_customers")
+          .update({ plan_expires: subscription.cancel_at })
+          .eq("subscription_id", subscription.id);
+        if (error) console.error(`Error: ${error}`);
       }
 
+      // Stripe sends this event when a customer subscription plan ends
       if (event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object;
+        console.log(subscription);
+        // Update the plan_active field
+        const { error } = await supabaseAdmin
+          .from("stripe_customers")
+          .update({ plan_active: false, subscription_id: null })
+          .eq("subscription_id", subscription.id);
+        if (error) console.error(`Error: ${error}`);
       }
 
       return NextResponse.json({ message: "success" });
