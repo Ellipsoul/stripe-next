@@ -65,7 +65,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <h1>User Data</h1>
+      <h2>User Data</h2>
       {user ? (
         <>
           <p>

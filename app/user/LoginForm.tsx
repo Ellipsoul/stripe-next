@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/utils/supabaseClient";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -21,9 +22,13 @@ export default function LoginForm() {
       password,
     });
 
-    console.log(
-      error ? error : `User created and logged in with: ${JSON.stringify(data)}`
-    );
+    if (error) {
+      console.error(error);
+      toast.error("Error creating user, check browser console");
+    } else {
+      console.log(`User created and logged in with: ${JSON.stringify(data)}`);
+      toast.success("Successfully created user!");
+    }
 
     setLoading(false);
   };
