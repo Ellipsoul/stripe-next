@@ -29,7 +29,7 @@ export default function PortalButton() {
       router.push(url);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create billing portal session:");
+      toast.error("Failed to create billing portal session");
     }
   };
 

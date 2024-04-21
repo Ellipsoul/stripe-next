@@ -1,3 +1,7 @@
+## Demo
+
+This application is deployed in test mode at: https://stripenext.aronteh.com/
+
 ## Technologies Explored
 
 - React
