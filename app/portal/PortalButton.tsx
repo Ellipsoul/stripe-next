@@ -2,7 +2,7 @@
 
 import { createPortalSession } from "./portalAction";
 import { supabase } from "@/utils/supabaseClient";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 // Redirects the user to a Stripe-hosted portal to manage subscriptions
