@@ -2,10 +2,13 @@
 
 import { createPortalSession } from "./portalAction";
 import { supabase } from "@/utils/supabaseClient";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
 // Redirects the user to a Stripe-hosted portal to manage subscriptions
 export default function PortalButton() {
+  const router = useRouter();
+
   const handleClick = async () => {
     try {
       // Retrieve the customer data from Supabase
@@ -23,7 +26,7 @@ export default function PortalButton() {
 
       // Redirect the user to the portal URL
       const { url } = await createPortalSession(customer?.stripe_customer_id);
-      window.location.href = url;
+      router.push(url);
     } catch (error) {
       console.error(error);
       toast.error("Failed to create billing portal session:");
