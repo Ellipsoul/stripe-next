@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/utils/stripe";
 import { supabaseAdmin } from "@/utils/supabaseServer";
-import { randomBytes } from "crypto";
+import Stripe from "stripe";
 
 export async function POST(request: Request) {
   try {
@@ -44,20 +44,25 @@ export async function POST(request: Request) {
     const subscription = await stripe.subscriptions.retrieve(
       customer.subscription_id
     );
+    console.log("Subscription", subscription);
+
     const subscriptionItem = subscription.items.data[0];
-    const usageRecord = await stripe.subscriptionItems.createUsageRecord(
-      subscriptionItem.id,
-      {
-        quantity: 1,
-        timestamp: "now",
-        action: "increment",
+    console.log("Subscription Item", subscriptionItem);
+
+    // Create a meter event
+    const meterEventCreateParams: Stripe.Billing.MeterEventCreateParams = {
+      event_name: "photo_downloaded",
+      payload: {
+        value: "1",
+        stripe_customer_id: customer.stripe_customer_id,
       },
-      {
-        idempotencyKey: randomBytes(16).toString("hex"),
-      }
+      timestamp: Math.floor(Date.now() / 1000),
+    };
+    const meterEvent = await stripe.billing.meterEvents.create(
+      meterEventCreateParams
     );
 
-    console.log(usageRecord);
+    console.log(meterEvent);
 
     // Return message that usage has been correctly recorded
     return NextResponse.json(

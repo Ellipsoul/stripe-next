@@ -7,3 +7,7 @@
 - Stripe + Stripe.js
 - Supabase
 - Project IDX
+
+### Testing Webhooks Locally
+
+Run `stripe listen --forward-to localhost:3000/api/webhook` to start listening to Webhooks
